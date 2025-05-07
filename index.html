@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Recommender System</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+    <title>Document</title>
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body class="font-poppins pt-16">
+    <!-- Navbar -->
+
+    <nav class="px-5 flex justify-between items-center bg-white md:justify-around fixed top-0 left-0 right-0 z-50 shadow-md transition-all duration-300">
+      <!-- navlogo -->
+      <a href="#" class="flex gap-1 justify-center items-center py-2">
+        <img
+          src="./image/restaurant-svgrepo-com.svg"
+          alt="Restaurant Logo"
+          class="object-cover max-w-12 max-h-12" />
+      </a>
+
+      <!-- nav-menu -->
+
+      <div id="nav-menu" class="hidden md:flex gap-12">
+        <a href="#" class="text-xl font-medium hover:text-primary">Home</a>
+        <a href="#About" class="text-xl font-medium hover:text-primary"
+          >About</a
+        >
+        <a href="#Contact" class="text-xl font-medium hover:text-primary"
+          >Contact Us</a
+        >
+      </div>
+
+      <!-- Credentials -->
+      <a href="Credentials.html"
+        class="text-xl hidden md:block px-4 py-2 border rounded-lg bg-primary text-white cursor-pointer hover:border-transparent">
+        Credentials
+      </a>
+
+      <!-- Hamburger -->
+      <button
+        class="md:hidden px-2 font-medium text-2xl flex items-center justify-center"
+        onclick="handleMenu()">
+        <i class="fa-solid fa-bars text-gray-700"></i>
+      </button>
+
+      <div id="nav-section" class="md: hidden fixed top-0 left-0 right-0 bg-gray-200 z-1000">
+        <div class="nav-bar flex justify-between px-7">
+          <a href="#" class="flex gap-1  items-center p-2">
+            <img
+              src="./image/restaurant-svgrepo-com.svg"
+              alt="Restaurant Logo"
+              class="object-cover max-w-12 max-h-12" />
+          </a>
+
+          <button
+            class="md:hidden px-2 font-medium text-2xl flex items-center justify-center"
+            onclick="handleMenu()">
+            <i class="fa-solid fa-xmark text-gray-700"></i>
+          </button>
+        </div>
+
+        <div class="flex flex-col items-center bg-white">
+          <a
+            href="#"
+            class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
+            >Home</a
+          >
+          <a
+            href="#About"
+            class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
+            >About</a
+          >
+          <a
+            href="#Contact"
+            class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
+            >Contact Us</a
+          >
+          <a href="Credentials.html"
+            class="m-3 text-xl px-4 py-2 border rounded-lg bg-primary text-white cursor-pointer hover:border-gray-400 outline-none">
+            Credentials
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Home -->
+
+    <div class="relative w-screen h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center" style="background-image: url('./Image/BG 4.jpg');">
+      <div class="absolute inset-0 bg-black opacity-70"></div>
+
+      <!-- Internal Div -->
+
+      <div class="bg-gray-900 opacity-75 w-[85%] md:mx-16 md:h-7/10 rounded-2xl overflow-hidden flex flex-col justify-center items-center text-white z-100 md:flex-row">
+
+        <!-- Left Section -->
+        <div class=" p-5 flex flex-col md:w-1/2 md:h-full md:flex md:flex-col md:justify-center">
+          <h1 class=" font-bold text-3xl md:text-5xl mb-2 text-red-500 py-2 text-wrap animate-slideDownFade">Restaurant recommender system</h1>
+          <h2 class="text-blue-600 font-semibold text-md">Based on Indore Location......</h2>
+          <p class="font-semibold text-[15px] my-5 text-shadow-white">
+            Welcome to our Restaurant Recommender System 🎉
+          </p>
+          <p class="font-semibold text-[15px] my-3 text-shadow-white">
+            Finding the perfect restaurant can be overwhelming, but we make it simple and effortless. Our AI-powered recommendation system helps you discover top-rated restaurants tailored to your location, taste preferences, and favorite cuisines.
+          </p>
+          <p class="font-semibold text-[15px] my-3 text-shadow-white">
+            Whether you're craving spicy Indian, authentic Italian, cozy cafés, or something new, we've got you covered. 🧑‍🍳🍜
+          </p>
+
+          <p class="font-semibold text-[15px] my-3 text-shadow-white">
+            Start exploring now — your next great meal is just a click away!
+          </p>
+        </div>
+
+        <!-- Right Section -->
+        <div class="z-100 py-4 px-15 flex flex-col justify-center w-full md:w-1/2 md:h-full">
+          <h2 class="mb-3 md:mb-7 text-center font-semibold text-3xl md:text-4xl">Find Your Best Restaurant</h2>
+          <!-- <div class="w-10 h-1 bg-green-400 mx-auto mb-2"></div> -->
+
+          <form id="prediction-form" class="flex flex-col justify-center px-15">
+            <label for="locality" class="text-shadow-white block mb-2 font-semibold">Locality :</label>
+            <input id="locality" type="text" class="focus:outline-none transition-all duration-300 ease-in-out border rounded-xl mb-2 px-3 py-2 placeholder-gray-400" placeholder="Enter your locality (e.g., Vijay Nagar)" required>
+
+            <label class="block mb-2 font-semibold text-shadow-white" for="cuisine">Cuisine :</label>
+            <input id="cuisine" type="text" class="focus:outline-none transition-all duration-300 ease-in-out border rounded-xl mb-2 px-3 py-2 placeholder-gray-400" placeholder="Enter your preferred cuisine (e.g., North Indian)" required>
+
+            <button id="predict-btn" type="submit" class="text-shadow-white cursor-pointer bg-blue-500 hover:bg-blue-600 hover:shadow-blue-700 rounded-2xl px-5 py-2 mx-auto my-3">
+              <span>Predict</span>
+              <span id="loading-spinner" class="hidden ml-2">
+                <i class="fas fa-spinner fa-spin"></i>
+              </span>
+            </button>
+          </form>
+
+          <!-- Output will be displayed here -->
+          <div id="output" class="hidden mt-3 text-white text-lg font-medium border border-gray-600 rounded-xl mx-auto px-5 py-2 w-full bg-gray-900">
+            <div id="prediction-rating" class="text-center py-2"></div>
+            <div id="restaurants-list" class="mt-2"></div>
+            <div id="suggestions" class="mt-2 text-yellow-300"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+</div>
+
+    <!-- About -->
+
+    <section id="About" class="px-4 py-5 md:px-16">
+      <h2
+        class="text-center text-2xl font-semibold md:text-3xl animate-pulse initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}">
+        About Us
+      </h2>
+
+      <div
+        class="mt-8 flex flex-col md:flex-row items-stretch bg-gray-200 rounded-3xl shadow-lg overflow-hidden">
+        <!-- Text Section -->
+        <div class="p-10 md:w-1/2 flex flex-col justify-center">
+          <h3
+            class="mb-4 text-xl font-bold md:text-2xl typing-effect text-blue-600 tracking-wide">
+            About Our Restaurant Dataset
+          </h3>
+          <p class="mt-4 text-gray-800 max-w-9/10">
+            In today's fast-paced world, choosing the right restaurant can be
+            overwhelming. With thousands of dining options available, how do you
+            know which one suits your taste and budget? Our Restaurant
+            Recommender System solves this problem by providing personalized
+            restaurant recommendations based on ratings, location, cuisine
+            preferences, and data-driven insights.
+          </p>
+          <p class="mt-4 text-gray-800 max-w-9/10">
+            Whether you're craving Italian, Indian, or Chinese cuisine, our
+            system helps you discover the best places to eat with just a few
+            clicks.
+          </p>
+        </div>
+
+        <!-- Image Section -->
+        <div class="md:w-1/2">
+          <img
+            src="./Image/About.jpg"
+            alt="Delicious food"
+            class="w-full h-full object-cover" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback -->
+
+    <section id="Contact" class="px-4 py-5 md:px-16">
+      <!-- Heading -->
+      <h2
+        class=" text-center text-2xl md:text-3xl font-semibold animate-pulse initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}">
+        Contact Us
+      </h2>
+
+      <!-- Internal Div -->
+      <div
+        class="mt-8 flex flex-col md:flex-row items-stretch bg-gray-200 rounded-3xl shadow-lg overflow-hidden">
+        <!-- Left-Section -->
+        <div class="md:w-1/2">
+          <img
+            src="./Image/Contact 2.jpg"
+            alt="Image"
+            class="w-full h-full object-cover" />
+        </div>
+        <!-- Right-Section -->
+        <div
+          class="m-2 px-10 md:w-1/2 flex flex-col justify-center items-center">
+          <!-- Heading -->
+          <h3 class="my-2text-xl font-poppins md:text-2xl tracking-wide">
+            Restaurant Feedback Form
+          </h3>
+
+          <!-- Form -->
+
+          <form id="contact-form"
+            class="my-3 rounded-2xl bg-white flex flex-col justify-center items-center w-9/10">
+            <input
+              type="text"
+              name="first_name"
+              placeholder="Enter your First name :"
+              required
+              class="border border-gray-200 rounded-xl px-5 py-[6px] mt-5 w-10/12 md:w-7/10 shadow-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-300 focus:outline-none" />
+
+            <input
+              type="text"
+              name="last_name"
+              placeholder="Enter your Last name :"
+              required
+              class="border border-gray-200 rounded-xl px-5 py-[6px] mt-5 w-10/12 md:w-7/10 shadow-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-300 focus:outline-none" />
+
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="Enter your phone number :"
+              required
+              class="border border-gray-200 rounded-xl px-5 py-[6px] mt-5 w-10/12 md:w-7/10 shadow-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-300 focus:outline-none" />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email :"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              required
+              class="border border-gray-200 rounded-xl px-5 py-[6px] mt-5 w-10/12 md:w-7/10 shadow-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-300 focus:outline-none" />
+
+            <textarea
+              name="feedback"
+              rows="4"
+              placeholder="Enter your feedback here !"
+              class="border border-gray-200 rounded-xl px-5 py-[6px] mt-5 w-10/12 md:w-7/10 shadow-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-300 focus:outline-none resize-none"></textarea>
+
+            <!-- Submit Button -->
+
+            <div class="text-center">
+              <button
+                type="submit"
+                class="my-5 w-full py-3 px-4 bg-blue-500 font-semibold text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Submit Feedback
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback Success Popup -->
+    <div id="feedback-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg p-8 max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-green-600">Thank You!</h3>
+          <button id="close-popup" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="mb-4">
+          <p class="text-gray-600">Thank you for your feedback!</p>
+        </div>
+        <div class="flex justify-end">
+          <button id="confirm-popup" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Error Popup -->
+    <div id="error-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg p-8 max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-red-600">Error</h3>
+          <button id="close-error-popup" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="mb-4">
+          <p id="error-message" class="text-gray-600">Failed to send feedback. Please try again later.</p>
+        </div>
+        <div class="flex justify-end">
+          <button id="confirm-error-popup" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EmailJS SDK - Latest Version -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+      // Initialize EmailJS with your public key
+      (function() {
+        try {
+          emailjs.init({
+            publicKey: "LBGotSW3D8VaOMttF",
+          });
+          console.log("EmailJS initialized successfully");
+        } catch (error) {
+          console.error("EmailJS initialization error:", error);
+        }
+      })();
+    </script>
+
+    <script src="script.js"></script>
+
+
+
+  </body>
+</html>
