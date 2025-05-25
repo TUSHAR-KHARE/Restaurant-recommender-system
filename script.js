@@ -74,6 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Cache for storing prediction results to avoid duplicate API calls
+const predictionCache = new Map();
+
 // Wait for the DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
     // EmailJS is now initialized directly in the HTML
@@ -86,14 +89,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (predictionForm) {
         // Add submit event listener to the form
-        predictionForm.onsubmit = function(event) {
+        predictionForm.addEventListener('submit', function(event) {
             // Prevent the default form submission
             event.preventDefault();
-            console.log("Form submitted");
+            console.log("Form submitted - preventDefault called");
 
             // Get input values
             const locality = document.getElementById('locality').value;
             const cuisine = document.getElementById('cuisine').value;
+
+            console.log("Input values - Locality:", locality, "Cuisine:", cuisine);
 
             // Form validation is handled by HTML5 required attributes
             // This is just a double-check
@@ -102,7 +107,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            console.log("Sending prediction request for:", locality, cuisine);
+            console.log("Validation passed. Sending prediction request for:", locality, cuisine);
+
+            // Create cache key
+            const cacheKey = `${locality.toLowerCase().trim()}_${cuisine.toLowerCase().trim()}`;
+
+            // Check if we have cached result
+            if (predictionCache.has(cacheKey)) {
+                console.log("Using cached result for:", cacheKey);
+                const cachedResult = predictionCache.get(cacheKey);
+                displayResults(cachedResult);
+                return;
+            }
 
             // Show loading spinner
             const loadingSpinner = document.getElementById('loading-spinner');
@@ -117,12 +133,95 @@ document.addEventListener("DOMContentLoaded", function () {
                 predictBtn.disabled = true;
             }
 
-            // For demonstration purposes, we'll use mock data instead of making an API request
-            // This ensures the prediction feature works even without a backend server
-            console.log("Using mock data for prediction");
+            // Try to use the real API first, fallback to mock data if needed
+            console.log("Attempting to use real ML model prediction");
 
-            // Function to get realistic restaurant names based on cuisine
-            function getRestaurantNames(cuisine) {
+            // Make API request to Flask backend with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+            fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    locality: locality.trim(),
+                    cuisine: cuisine.trim(),
+                }),
+                signal: controller.signal
+            })
+            .then(response => {
+                clearTimeout(timeoutId);
+                console.log("Response received:", response);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                console.log("✅ REAL API SUCCESS! Data received from API:", data);
+                console.log("🤖 Model Used:", data.model_used);
+                console.log("📊 Status:", data.status);
+
+                // Validate the response data
+                if (data && (data.status === 'success' || data.status === 'locality_not_found' || data.status === 'cuisine_not_found')) {
+                    // Cache the successful result
+                    predictionCache.set(cacheKey, data);
+                    console.log("🎯 USING REAL ML MODEL PREDICTION - NOT FALLBACK!");
+                    displayResults(data);
+                } else {
+                    throw new Error('Invalid response format from API');
+                }
+
+                // Hide loading spinner and re-enable button
+                if (loadingSpinner) {
+                    loadingSpinner.classList.add('hidden');
+                }
+                if (predictBtn) {
+                    predictBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                clearTimeout(timeoutId);
+                console.error("API Error:", error);
+
+                // Determine if it's a network error or server error
+                if (error.name === 'AbortError') {
+                    console.log("Request timed out, falling back to mock data");
+                } else if (error.message.includes('fetch')) {
+                    console.log("Network error, falling back to mock data");
+                } else {
+                    console.log("Server error, falling back to mock data");
+                }
+
+                // Fallback to mock data if API fails
+                console.log("⚠️ USING FALLBACK MOCK DATA - API FAILED!");
+                const mockData = generateMockData(locality, cuisine);
+                // Cache the fallback result too
+                predictionCache.set(cacheKey, mockData);
+                displayResults(mockData);
+
+                // Hide loading spinner and re-enable button
+                if (loadingSpinner) {
+                    loadingSpinner.classList.add('hidden');
+                }
+                if (predictBtn) {
+                    predictBtn.disabled = false;
+                }
+            });
+        });
+    } else {
+        console.error("Predict button not found!");
+    }
+});
+
+// Function to generate mock data as fallback (moved outside DOMContentLoaded)
+function generateMockData(locality, cuisine) {
+        // Function to get realistic restaurant names based on cuisine
+        function getRestaurantNames(cuisine) {
                 // Restaurant names by cuisine type
                 const restaurantsByCuisine = {
                     'North Indian': [
@@ -167,77 +266,60 @@ document.addEventListener("DOMContentLoaded", function () {
             // Get restaurant names for the selected cuisine
             const restaurantNames = getRestaurantNames(cuisine);
 
-            // Create mock data based on user input with realistic restaurant names
+            // Create a simple hash function for consistent results
+            function simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash; // Convert to 32-bit integer
+                }
+                return Math.abs(hash);
+            }
+
+            // Generate consistent "random" values based on input (normalize inputs first)
+            const inputKey = locality.toLowerCase().trim() + cuisine.toLowerCase().trim();
+            const seed = simpleHash(inputKey);
+
+            // Pseudo-random function with seed - improved for better distribution
+            function seededRandom(seed, min, max) {
+                // Use a better pseudo-random algorithm
+                let x = Math.sin(seed * 9301 + 49297) * 233280;
+                const random = x - Math.floor(x);
+                return Math.round((random * (max - min) + min) * 10) / 10; // Round to 1 decimal
+            }
+
+            // Create mock data based on user input with consistent results
             const mockData = {
                 status: 'success',
                 locality: locality,
                 cuisine: cuisine,
-                predicted_rating: (Math.random() * 2 + 3).toFixed(1), // Random rating between 3.0 and 5.0
+                predicted_rating: seededRandom(seed, 3.0, 5.0).toFixed(1),
                 restaurants: [
                     {
                         name: restaurantNames[0],
-                        rating: (Math.random() * 1 + 4).toFixed(1), // Random rating between 4.0 and 5.0
+                        rating: seededRandom(seed + 1, 4.0, 5.0).toFixed(1),
                         address: `123 Main Street, ${locality}, Indore`
                     },
                     {
                         name: restaurantNames[1],
-                        rating: (Math.random() * 1.5 + 3.5).toFixed(1), // Random rating between 3.5 and 5.0
+                        rating: seededRandom(seed + 2, 3.5, 5.0).toFixed(1),
                         address: `456 Park Avenue, ${locality}, Indore`
                     },
                     {
                         name: restaurantNames[2],
-                        rating: (Math.random() * 2 + 3).toFixed(1), // Random rating between 3.0 and 5.0
+                        rating: seededRandom(seed + 3, 3.0, 5.0).toFixed(1),
                         address: `789 Food Street, ${locality}, Indore`
                     }
                 ]
             };
 
-            // Display the mock results
-            console.log("Mock data:", mockData);
-            displayResults(mockData);
+            // Return the mock data for fallback use
+            return mockData;
+}
 
-            /* Commented out the actual API request for now
-            // Make API request
-            fetch('http://localhost:5000/predict', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    locality: locality,
-                    cuisine: cuisine,
-                }),
-            })
-            .then(response => {
-                console.log("Response received:", response);
-                return response.json();
-            })
-            .then(data => {
-                console.log("Data received:", data);
-                displayResults(data);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert('Error occurred. Please try again.');
-            });
-            */
-
-            // Hide loading spinner and re-enable button after a short delay
-            setTimeout(() => {
-                if (loadingSpinner) {
-                    loadingSpinner.classList.add('hidden');
-                }
-                if (predictBtn) {
-                    predictBtn.disabled = false;
-                }
-            }, 500);
-        };
-    } else {
-        console.error("Predict button not found!");
-    }
-
-    // Function to display results
-    function displayResults(data) {
+// Function to display results (moved outside DOMContentLoaded)
+function displayResults(data) {
         // Get output elements
         const outputDiv = document.getElementById('output');
         const ratingDiv = document.getElementById('prediction-rating');
@@ -254,9 +336,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Handle different response types
         if (data.status === 'success') {
-            // Display the predicted rating
+            // Display the predicted rating with model information
             if (data.predicted_rating) {
-                ratingDiv.innerHTML = `<div class="text-xl font-bold">Predicted Rating: <span class="text-yellow-400">${data.predicted_rating}</span></div>`;
+                const modelInfo = data.model_used ?
+                    '<span class="text-green-400 text-sm">(ML Model)</span>' :
+                    '<span class="text-blue-400 text-sm">(Fallback)</span>';
+                ratingDiv.innerHTML = `<div class="text-xl font-bold">Predicted Rating: <span class="text-yellow-400">${data.predicted_rating}</span> ${modelInfo}</div>`;
             }
 
             // Display only the highest-rated restaurant if available
@@ -277,17 +362,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Final highest rated restaurant:", highestRatedRestaurant);
 
                 const heading = document.createElement('h3');
-                heading.className = 'text-center text-lg font-bold mb-2';
+                heading.className = 'text-center text-sm font-bold mb-1';
                 heading.textContent = `Highest Rated ${data.cuisine} Restaurant in ${data.locality}`;
                 restaurantsDiv.appendChild(heading);
 
                 // Create container for the restaurant card
                 const cardsContainer = document.createElement('div');
-                cardsContainer.className = 'grid grid-cols-1 gap-3 mt-2';
+                cardsContainer.className = 'grid grid-cols-1 gap-1 mt-1';
 
                 // Create card for the highest-rated restaurant
                 const card = document.createElement('div');
-                card.className = 'bg-gray-800 p-3 rounded-lg';
+                card.className = 'bg-gray-800 p-2 rounded-md';
                 console.log("Created restaurant card with class:", card.className);
 
                 // Restaurant name with rating
@@ -295,12 +380,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 nameRating.className = 'flex justify-between items-center';
 
                 const name = document.createElement('h4');
-                name.className = 'text-lg font-bold text-white'; // Added text-white for better visibility
+                name.className = 'text-sm font-bold text-white'; // Reduced from text-lg to text-sm
                 name.textContent = highestRatedRestaurant.name;
                 console.log("Setting restaurant name to:", highestRatedRestaurant.name);
 
                 const rating = document.createElement('span');
-                rating.className = 'bg-green-600 text-white px-2 py-1 rounded-md text-sm';
+                rating.className = 'bg-green-600 text-white px-1 py-0.5 rounded text-xs';
                 rating.textContent = `★ ${highestRatedRestaurant.rating}`;
 
                 nameRating.appendChild(name);
@@ -308,7 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Restaurant address
                 const address = document.createElement('p');
-                address.className = 'text-gray-300 text-sm mt-1';
+                address.className = 'text-gray-300 text-xs mt-0.5';
                 address.textContent = highestRatedRestaurant.address;
 
                 // Add elements to card
@@ -345,8 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Fallback for unexpected response
             suggestionsDiv.innerHTML = `<p class="text-center text-yellow-300">Received response: ${JSON.stringify(data)}</p>`;
         }
-    }
-});
+}
 
 // Phone Number Validation
 const phoneInput = document.getElementById('phone');

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meet Our Team</title>
+    <link rel="icon" type="image/png" href="./Image/Project favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="./Image/Project favicon.png" />
+    <link rel="apple-touch-icon" href="./Image/Project favicon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+    <link href="./output.css" rel="stylesheet" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        height: auto;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body class="font-poppins bg-gray-100">
+    <!-- Navbar -->
+    <nav class="px-5 flex justify-between items-center bg-white md:justify-around fixed top-0 left-0 right-0 z-50 shadow-md transition-all duration-300">
+      <!-- navlogo -->
+      <a href="index.html" class="flex gap-1 justify-center items-center p-2">
+        <img
+          src="./Image/Restaurant logo.png"
+          alt="Restaurant Logo"
+          class="object-cover max-w-12 max-h-12" />
+      </a>
+
+      <!-- nav-menu -->
+      <div id="nav-menu" class="hidden md:flex gap-12">
+        <a href="index.html" class="text-xl font-medium hover:text-primary">Home</a>
+        <a href="index.html#About" class="text-xl font-medium hover:text-primary">About</a>
+        <a href="index.html#Contact" class="text-xl font-medium hover:text-primary">Contact Us</a>
+      </div>
+
+      <!-- Our Teams -->
+      <a href="meetourteam.html"
+        class="text-xl hidden md:block px-4 py-2 border rounded-lg bg-primary text-white cursor-pointer hover:border-transparent">
+        Our Teams
+      </a>
+
+      <!-- Hamburger -->
+      <button
+        class="md:hidden px-2 font-medium text-2xl flex items-center justify-center"
+        onclick="handleMenu()">
+        <i class="fa-solid fa-bars text-gray-700"></i>
+      </button>
+
+      <div id="nav-section" class="md: hidden fixed top-0 left-0 right-0 bg-gray-200 z-1000">
+        <div class="nav-bar flex justify-between px-7">
+          <a href="index.html" class="flex gap-1 items-center p-2">
+            <img
+              src="./Image/Restaurant logo.png"
+              alt="Restaurant Logo"
+              class="object-cover max-w-12 max-h-12" />
+          </a>
+
+          <button
+            class="md:hidden px-2 font-medium text-2xl flex items-center justify-center"
+            onclick="handleMenu()">
+            <i class="fa-solid fa-xmark text-gray-700"></i>
+          </button>
+        </div>
+
+        <div class="flex flex-col items-center bg-white">
+          <a
+            href="index.html"
+            class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
+            >Home</a
+          >
+          <a
+            href="index.html#About"
+            class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
+            >About</a
+          >
+          <a
+            href="index.html#Contact"
+            class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
+            >Contact Us</a
+          >
+          <a href="meetourteam.html"
+            class="m-3 text-xl px-4 py-2 border rounded-lg bg-primary text-white cursor-pointer hover:border-gray-400 outline-none">
+            Our Teams
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="px-4 sm:px-6 lg:px-8" style="padding-top: 90px;">
+      <div class="max-w-5xl mx-auto">
+
+        <!--Team Header -->
+        <header class="text-center mb-20" style="margin-top: 0px;">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 mb-6 leading-tight">
+            Meet Our Experts
+          </h1>
+          <p class="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            Five passionate developers working together to revolutionize restaurant discovery through AI and data science
+          </p>
+        </header>
+
+        <!-- Team Table -->
+        <section class="bg-white rounded-2xl shadow-2xl overflow-hidden" style="padding-bottom: 0px; margin-bottom: 0px;">
+          <div class="overflow-x-auto">
+            <table class="min-w-full" style="border-collapse: collapse;">
+              <!-- Table Header -->
+              <thead class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <tr>
+                  <th class="px-6 py-4 text-left text-lg font-bold">Team Member</th>
+                  <th class="px-6 py-4 text-left text-lg font-bold">Role</th>
+                  <th class="px-6 py-4 text-left text-lg font-bold">Expertise & Contributions</th>
+                </tr>
+              </thead>
+
+              <!-- Table Body -->
+              <tbody>
+
+                <!-- Team Member 1: Anup Moyal -->
+                <tr class="hover:bg-blue-50 transition-colors duration-200">
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-4">
+                      <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-palette text-white text-2xl" aria-hidden="true"></i>
+                      </div>
+                      <div>
+                        <h3 class="text-2xl font-black text-gray-900 tracking-wide">ANUP MOYAL</h3>
+                        <p class="text-sm text-gray-600 mt-1">Design Excellence & User Experience</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+                      UI/UX Design
+                    </span>
+                  </td>
+                  <td class="px-6 py-6">
+                    <ul class="space-y-2 text-gray-700">
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span class="font-medium">Creative Design Solutions</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span class="font-medium">User Experience Optimization</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span class="font-medium">Interface Design Mastery</span>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+
+                <!-- Team Member 2: Govind Shukla -->
+                <tr class="hover:bg-green-50 transition-colors duration-200">
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-4">
+                      <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-code text-white text-2xl" aria-hidden="true"></i>
+                      </div>
+                      <div>
+                        <h3 class="text-2xl font-black text-gray-900 tracking-wide">GOVIND KUMAR</h3>
+                        <p class="text-sm text-gray-600 mt-1">Modern Web Technologies & Performance</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                      Frontend Development
+                    </span>
+                  </td>
+                  <td class="px-6 py-6">
+                    <ul class="space-y-2 text-gray-700">
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span class="font-medium">Modern Web Technologies</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span class="font-medium">Responsive Design Expert</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span class="font-medium">Performance Optimization</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span class="font-medium">Cross-browser Compatibility</span>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+
+                <!-- Team Member 3: Sourabh Kumar -->
+                <tr class="hover:bg-purple-50 transition-colors duration-200">
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-4">
+                      <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-server text-white text-2xl" aria-hidden="true"></i>
+                      </div>
+                      <div>
+                        <h3 class="text-2xl font-black text-gray-900 tracking-wide">SOURABH KUMAR</h3>
+                        <p class="text-sm text-gray-600 mt-1">Server Architecture & API Development</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
+                      Backend Development
+                    </span>
+                  </td>
+                  <td class="px-6 py-6">
+                    <ul class="space-y-2 text-gray-700">
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                        <span class="font-medium">Flask API Architecture</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                        <span class="font-medium">Database Management</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                        <span class="font-medium">API Endpoint Creation</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                        <span class="font-medium">Server-side Logic</span>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+
+                <!-- Team Member 4: Tushar Khare -->
+                <tr class="hover:bg-orange-50 transition-colors duration-200">
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-4">
+                      <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-2xl" aria-hidden="true"></i>
+                      </div>
+                      <div>
+                        <h3 class="text-2xl font-black text-gray-900 tracking-wide">TUSHAR KHARE</h3>
+                        <p class="text-sm text-gray-600 mt-1">Machine Learning & Data Analysis</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-orange-100 text-orange-800">
+                      ML Model & EDA
+                    </span>
+                  </td>
+                  <td class="px-6 py-6">
+                    <ul class="space-y-2 text-gray-700">
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                        <span class="font-medium">Machine Learning Models</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                        <span class="font-medium">Exploratory Data Analysis</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                        <span class="font-medium">Model Training & Evaluation</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                        <span class="font-medium">Algorithm Optimization</span>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+
+                <!-- Team Member 5: Nishit Kumar -->
+                <tr class="hover:bg-red-50 transition-colors duration-200">
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-4">
+                      <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-chart-bar text-white text-2xl" aria-hidden="true"></i>
+                      </div>
+                      <div>
+                        <h3 class="text-2xl font-black text-gray-900 tracking-wide">NISHIT KUMAR</h3>
+                        <p class="text-sm text-gray-600 mt-1">Data Visualization & Business Intelligence</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800">
+                      Data Visualization
+                    </span>
+                  </td>
+                  <td class="px-6 py-6">
+                    <ul class="space-y-2 text-gray-700">
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span class="font-medium">Power BI Dashboards</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span class="font-medium">Data Visualization Design</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span class="font-medium">Interactive Charts & Graphs</span>
+                      </li>
+                      <li class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span class="font-medium">Business Intelligence</span>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Acknowledgement Section -->
+        <section class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 lg:p-12 text-left mt-8">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-8 text-center">Acknowledgement</h2>
+          <div class="max-w-5xl mx-auto space-y-6">
+            <p class="text-base lg:text-lg text-gray-700 leading-relaxed">
+              We would like to express our sincere gratitude to all those who have supported and guided us in the successful completion of this Restaurant Recommender System project.
+            </p>
+            <p class="text-base lg:text-lg text-gray-700 leading-relaxed">
+              First and foremost, we extend our heartfelt thanks to our faculty members and mentors for their invaluable feedback, patience, and continuous encouragement throughout the development process. Their insights have significantly contributed to the refinement of our project.
+            </p>
+            <p class="text-base lg:text-lg text-gray-700 leading-relaxed">
+              We are deeply grateful to our institute for providing us with the opportunity and necessary resources to explore and implement this idea. The access to technical infrastructure and learning materials played a key role in our progress.
+            </p>
+            <p class="text-base lg:text-lg text-gray-700 leading-relaxed">
+              Special thanks to our fellow students and project reviewers who shared constructive criticism and helped us troubleshoot real-time issues during model training, UI integration, and deployment phases.
+            </p>
+            <p class="text-base lg:text-lg text-gray-700 leading-relaxed">
+              Lastly, we would like to thank our team members — Govind, Anup Moyal, Sourabh, Tushar, and Nishit — for their tireless effort, collaboration, and dedication in making this project a success. Each contribution, whether in design, code, analytics, or presentation, has been instrumental in shaping the final outcome.
+            </p>
+            <p class="text-base lg:text-lg text-gray-700 leading-relaxed font-semibold text-center">
+              This project stands as a testament to our collective learning journey and team spirit.
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <script>
+      // Navigation menu toggle
+      const navSec = document.getElementById("nav-section");
+
+      function handleMenu() {
+          navSec.classList.toggle('hidden');
+      }
+    </script>
+  </body>
+</html>

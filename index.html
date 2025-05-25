@@ -4,23 +4,156 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Restaurant Recommender System</title>
+    <link rel="icon" type="image/png" href="./Image/Project favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="./Image/Project favicon.png" />
+    <link rel="apple-touch-icon" href="./Image/Project favicon.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer" />
-    <title>Document</title>
     <link href="./output.css" rel="stylesheet" />
+    <style>
+      /* Smooth scrolling for all anchor links */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Ensure sections have proper spacing for navbar */
+      section {
+        scroll-margin-top: 80px;
+      }
+
+      /* Mobile-only fixes - comprehensive solution */
+      @media (max-width: 768px) {
+        /* Fix the root issue - section height and positioning */
+        #Home {
+          height: auto !important;
+          min-height: 100vh !important;
+          padding-top: 80px !important;
+          padding-bottom: 20px !important;
+          justify-content: flex-start !important;
+        }
+
+        /* Fix container height and overflow */
+        #Home .bg-gray-900 {
+          height: auto !important;
+          min-height: 80vh !important;
+          max-height: none !important;
+          overflow: visible !important;
+          justify-content: flex-start !important;
+          padding: 1rem !important;
+          width: 95% !important;
+        }
+
+        /* Fix main heading - force visibility */
+        #Home h1 {
+          font-size: 1.5rem !important; /* text-2xl equivalent */
+          line-height: 1.3 !important;
+          margin-bottom: 0.5rem !important;
+          padding: 0.5rem 0 !important;
+          display: block !important;
+          visibility: visible !important;
+          position: relative !important;
+          z-index: 20 !important;
+        }
+
+        /* Fix subtitle - force visibility */
+        #Home .text-blue-600 {
+          font-size: 1rem !important; /* text-base equivalent */
+          margin-bottom: 0.75rem !important;
+          display: block !important;
+          visibility: visible !important;
+          position: relative !important;
+          z-index: 20 !important;
+        }
+
+        /* Fix form heading */
+        #Home h2:not(.text-blue-600) {
+          font-size: 1.25rem !important; /* text-xl equivalent */
+          margin-bottom: 1rem !important;
+        }
+
+        /* Compact spacing for mobile */
+        #Home .my-5 {
+          margin-top: 0.5rem !important;
+          margin-bottom: 0.5rem !important;
+        }
+
+        #Home .my-3 {
+          margin-top: 0.25rem !important;
+          margin-bottom: 0.25rem !important;
+        }
+
+        /* Ensure left section takes full width and is visible */
+        #Home .flex-col:first-child {
+          padding: 1rem !important;
+          width: 100% !important;
+          order: 1 !important;
+        }
+
+        /* Ensure right section (form) is visible */
+        #Home .flex-col:last-child {
+          padding: 1rem !important;
+          width: 100% !important;
+          order: 2 !important;
+        }
+
+        /* Force mobile layout to be vertical */
+        #Home .md\\:flex-row {
+          flex-direction: column !important;
+        }
+
+        /* Ensure predict button is always visible */
+        #predict-btn {
+          margin-top: 1rem !important;
+          margin-bottom: 1rem !important;
+          position: relative !important;
+          z-index: 30 !important;
+        }
+      }
+
+      /* Input box width control for all screen sizes */
+      #locality, #cuisine {
+        width: 100% !important; /* w-full */
+        max-width: 32rem !important; /* max-w-lg */
+      }
+
+      /* Ensure prediction output is visible and properly styled */
+      #output {
+        position: relative !important;
+        z-index: 10 !important;
+        margin-top: 1rem !important;
+        width: 100% !important;
+        padding: 0.25rem 0.75rem !important; /* Force py-1 px-3 */
+        font-size: 1rem !important; /* Force text-base */
+        line-height: 1.25rem !important;
+      }
+
+      #prediction-rating {
+        display: block !important;
+        visibility: visible !important;
+        padding: 0.25rem 0 !important; /* Force py-1 */
+      }
+
+      #restaurants-list {
+        margin-top: 0.25rem !important; /* Force mt-1 */
+      }
+
+      #suggestions {
+        margin-top: 0.25rem !important; /* Force mt-1 */
+      }
+    </style>
   </head>
   <body class="font-poppins pt-16">
     <!-- Navbar -->
 
     <nav class="px-5 flex justify-between items-center bg-white md:justify-around fixed top-0 left-0 right-0 z-50 shadow-md transition-all duration-300">
       <!-- navlogo -->
-      <a href="#" class="flex gap-1 justify-center items-center py-2">
+      <a href="index.html" class="flex gap-1 justify-center items-center py-2" onclick="window.location.reload(); return false;">
         <img
-          src="./image/restaurant-svgrepo-com.svg"
+          src="./Image/Restaurant logo.png"
           alt="Restaurant Logo"
           class="object-cover max-w-12 max-h-12" />
       </a>
@@ -28,7 +161,7 @@
       <!-- nav-menu -->
 
       <div id="nav-menu" class="hidden md:flex gap-12">
-        <a href="#" class="text-xl font-medium hover:text-primary">Home</a>
+        <a href="#Home" class="text-xl font-medium hover:text-primary">Home</a>
         <a href="#About" class="text-xl font-medium hover:text-primary"
           >About</a
         >
@@ -37,38 +170,40 @@
         >
       </div>
 
-      <!-- Credentials -->
-      <a href="Credentials.html"
+      <!-- Our Teams -->
+      <a href="meetourteam.html"
         class="text-xl hidden md:block px-4 py-2 border rounded-lg bg-primary text-white cursor-pointer hover:border-transparent">
-        Credentials
+        Our Teams
       </a>
 
       <!-- Hamburger -->
       <button
         class="md:hidden px-2 font-medium text-2xl flex items-center justify-center"
-        onclick="handleMenu()">
+        onclick="handleMenu()"
+        aria-label="Toggle navigation menu">
         <i class="fa-solid fa-bars text-gray-700"></i>
       </button>
 
-      <div id="nav-section" class="md: hidden fixed top-0 left-0 right-0 bg-gray-200 z-1000">
+      <div id="nav-section" class="md:hidden fixed top-0 left-0 right-0 bg-gray-200 z-50 hidden">
         <div class="nav-bar flex justify-between px-7">
-          <a href="#" class="flex gap-1  items-center p-2">
+          <a href="index.html" class="flex gap-1 items-center p-2" onclick="window.location.reload(); return false;">
             <img
-              src="./image/restaurant-svgrepo-com.svg"
+              src="./Image/Restaurant logo.png"
               alt="Restaurant Logo"
               class="object-cover max-w-12 max-h-12" />
           </a>
 
           <button
             class="md:hidden px-2 font-medium text-2xl flex items-center justify-center"
-            onclick="handleMenu()">
+            onclick="handleMenu()"
+            aria-label="Close navigation menu">
             <i class="fa-solid fa-xmark text-gray-700"></i>
           </button>
         </div>
 
         <div class="flex flex-col items-center bg-white">
           <a
-            href="#"
+            href="#Home"
             class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
             >Home</a
           >
@@ -82,9 +217,9 @@
             class="font-medium text-xl m-3 px-10 py-2 rounded-lg hover:text-primary hover:bg-gray-100 block"
             >Contact Us</a
           >
-          <a href="Credentials.html"
+          <a href="meetourteam.html"
             class="m-3 text-xl px-4 py-2 border rounded-lg bg-primary text-white cursor-pointer hover:border-gray-400 outline-none">
-            Credentials
+            Our Teams
           </a>
         </div>
       </div>
@@ -92,12 +227,12 @@
 
     <!-- Home -->
 
-    <div class="relative w-screen h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center" style="background-image: url('./Image/BG 4.jpg');">
+    <section id="Home" class="relative w-screen h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center" style="background-image: url('./Image/BG 4.jpg')">
       <div class="absolute inset-0 bg-black opacity-70"></div>
 
       <!-- Internal Div -->
 
-      <div class="bg-gray-900 opacity-75 w-[85%] md:mx-16 md:h-7/10 rounded-2xl overflow-hidden flex flex-col justify-center items-center text-white z-100 md:flex-row">
+      <div class="bg-gray-900 opacity-75 w-[85%] md:mx-16 md:h-3/4 rounded-2xl overflow-hidden flex flex-col justify-center items-center text-white z-10 md:flex-row">
 
         <!-- Left Section -->
         <div class=" p-5 flex flex-col md:w-1/2 md:h-full md:flex md:flex-col md:justify-center">
@@ -119,16 +254,16 @@
         </div>
 
         <!-- Right Section -->
-        <div class="z-100 py-4 px-15 flex flex-col justify-center w-full md:w-1/2 md:h-full">
+        <div class="z-10 py-4 px-6 flex flex-col justify-center w-full md:w-1/2 md:h-full">
           <h2 class="mb-3 md:mb-7 text-center font-semibold text-3xl md:text-4xl">Find Your Best Restaurant</h2>
           <!-- <div class="w-10 h-1 bg-green-400 mx-auto mb-2"></div> -->
 
-          <form id="prediction-form" class="flex flex-col justify-center px-15">
+          <form id="prediction-form" class="flex flex-col justify-center px-6">
             <label for="locality" class="text-shadow-white block mb-2 font-semibold">Locality :</label>
-            <input id="locality" type="text" class="focus:outline-none transition-all duration-300 ease-in-out border rounded-xl mb-2 px-3 py-2 placeholder-gray-400" placeholder="Enter your locality (e.g., Vijay Nagar)" required>
+            <input id="locality" type="text" class="focus:outline-none transition-all duration-300 ease-in-out border rounded-xl mb-2 px-3 py-2 placeholder-gray-400 w-full max-w-lg" placeholder="Enter locality" required>
 
             <label class="block mb-2 font-semibold text-shadow-white" for="cuisine">Cuisine :</label>
-            <input id="cuisine" type="text" class="focus:outline-none transition-all duration-300 ease-in-out border rounded-xl mb-2 px-3 py-2 placeholder-gray-400" placeholder="Enter your preferred cuisine (e.g., North Indian)" required>
+            <input id="cuisine" type="text" class="focus:outline-none transition-all duration-300 ease-in-out border rounded-xl mb-2 px-3 py-2 placeholder-gray-400 w-full max-w-lg" placeholder="Enter your preferred cuisine" required>
 
             <button id="predict-btn" type="submit" class="text-shadow-white cursor-pointer bg-blue-500 hover:bg-blue-600 hover:shadow-blue-700 rounded-2xl px-5 py-2 mx-auto my-3">
               <span>Predict</span>
@@ -139,17 +274,17 @@
           </form>
 
           <!-- Output will be displayed here -->
-          <div id="output" class="hidden mt-3 text-white text-lg font-medium border border-gray-600 rounded-xl mx-auto px-5 py-2 w-full bg-gray-900">
-            <div id="prediction-rating" class="text-center py-2"></div>
-            <div id="restaurants-list" class="mt-2"></div>
-            <div id="suggestions" class="mt-2 text-yellow-300"></div>
+          <div id="output" class="hidden mt-3 text-white text-base font-medium border border-gray-600 rounded-lg mx-auto px-3 py-1 w-full bg-gray-900">
+            <div id="prediction-rating" class="text-center py-1"></div>
+            <div id="restaurants-list" class="mt-1"></div>
+            <div id="suggestions" class="mt-1 text-yellow-300"></div>
           </div>
 
         </div>
 
       </div>
 
-</div>
+</section>
 
     <!-- About -->
 
@@ -212,14 +347,14 @@
         <div class="md:w-1/2">
           <img
             src="./Image/Contact 2.jpg"
-            alt="Image"
+            alt="Contact us - Restaurant feedback"
             class="w-full h-full object-cover" />
         </div>
         <!-- Right-Section -->
         <div
           class="m-2 px-10 md:w-1/2 flex flex-col justify-center items-center">
           <!-- Heading -->
-          <h3 class="my-2text-xl font-poppins md:text-2xl tracking-wide">
+          <h3 class="my-2 text-xl font-poppins md:text-2xl tracking-wide">
             Restaurant Feedback Form
           </h3>
 
