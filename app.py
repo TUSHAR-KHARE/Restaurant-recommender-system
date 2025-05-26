@@ -2,6 +2,25 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  # To handle CORS (Cross-Origin Resource Sharing)
 import logging
 
+
+
+
+
+
+
+@app.route('/')
+def home():
+    return jsonify({
+        'message': '🍽️ Welcome to the Restaurant Recommender API!',
+        'available_endpoints': {
+            'POST /predict': 'Predict restaurant ratings',
+            'GET /localities': 'Get list of localities',
+            'GET /cuisines': 'Get list of cuisines',
+            'GET /cuisines/<locality>': 'Get cuisines by locality',
+            'GET /health': 'Health check'
+        }
+    })
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
