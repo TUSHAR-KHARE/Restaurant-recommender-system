@@ -332,7 +332,7 @@ function displayResults(data) {
         suggestionsDiv.innerHTML = '';
 
         // Show the output div
-        outputDiv.classList.remove('hidden');
+        outputDiv.classList.add('show');
 
         // Handle different response types
         if (data.status === 'success') {
