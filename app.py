@@ -1,13 +1,26 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # To handle CORS (Cross-Origin Resource Sharing)
+from flask_cors import CORS
 import logging
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
+# Create app before defining routes
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
+# ML model loading
+try:
+    from model import get_prediction, get_localities, get_cuisines, get_cuisines_for_locality
+    MODEL_AVAILABLE = True
+    logger.info("✅ ML Model loaded successfully")
+except Exception as e:
+    MODEL_AVAILABLE = False
+    logger.error(f"❌ Failed to load ML model: {e}")
+    logger.info("🔄 Server will use fallback predictions")
 
-
-
-
+# Now you can define routes like @app.route('/')
 @app.route('/')
 def home():
     return jsonify({
@@ -20,6 +33,8 @@ def home():
             'GET /health': 'Health check'
         }
     })
+
+# (Rest of the routes here...)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

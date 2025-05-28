@@ -140,7 +140,27 @@ document.addEventListener("DOMContentLoaded", function () {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-            fetch('http://localhost:5000/predict', {
+            // Determine the correct API URL based on environment
+            const getApiUrl = () => {
+                // If we're on localhost, use localhost
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    return 'http://localhost:5000/predict';
+                }
+
+                // REPLACE THE URL BELOW WITH YOUR DEPLOYED BACKEND URL
+                // After deploying your Flask backend, replace this with the actual URL:
+                // return 'https://your-backend-app.railway.app/predict';
+                // return 'https://your-backend-app.onrender.com/predict';
+                // return 'https://your-backend-app.herokuapp.com/predict';
+
+                // For now, this will cause fallback (which is why you see mock data)
+                return 'https://your-deployed-backend-url-here.com/predict';
+            };
+
+            const apiUrl = getApiUrl();
+            console.log("Using API URL:", apiUrl);
+
+            fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
