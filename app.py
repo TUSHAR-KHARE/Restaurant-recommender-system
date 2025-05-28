@@ -20,41 +20,6 @@ except Exception as e:
     logger.error(f"❌ Failed to load ML model: {e}")
     logger.info("🔄 Server will use fallback predictions")
 
-# Now you can define routes like @app.route('/')
-@app.route('/')
-def home():
-    return jsonify({
-        'message': '🍽️ Welcome to the Restaurant Recommender API!',
-        'available_endpoints': {
-            'POST /predict': 'Predict restaurant ratings',
-            'GET /localities': 'Get list of localities',
-            'GET /cuisines': 'Get list of cuisines',
-            'GET /cuisines/<locality>': 'Get cuisines by locality',
-            'GET /health': 'Health check'
-        }
-    })
-
-# (Rest of the routes here...)
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-app = Flask(__name__)
-
-# Enabling CORS so the frontend can communicate with the backend on different ports
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-# Initialize model with error handling
-try:
-    from model import get_prediction, get_localities, get_cuisines, get_cuisines_for_locality
-    MODEL_AVAILABLE = True
-    logger.info("✅ ML Model loaded successfully")
-except Exception as e:
-    MODEL_AVAILABLE = False
-    logger.error(f"❌ Failed to load ML model: {e}")
-    logger.info("🔄 Server will use fallback predictions")
-
 def get_fallback_prediction(locality, cuisine):
     """Fallback prediction when ML model is not available"""
     cuisine_ratings = {
@@ -88,6 +53,19 @@ def get_fallback_prediction(locality, cuisine):
         ],
         'model_used': False
     }
+
+@app.route('/')
+def home():
+    return jsonify({
+        'message': '🍽️ Welcome to the Restaurant Recommender API!',
+        'available_endpoints': {
+            'POST /predict': 'Predict restaurant ratings',
+            'GET /localities': 'Get list of localities',
+            'GET /cuisines': 'Get list of cuisines',
+            'GET /cuisines/<locality>': 'Get cuisines by locality',
+            'GET /health': 'Health check'
+        }
+    })
 
 @app.route('/predict', methods=['POST'])
 def predict():
