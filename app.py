@@ -54,18 +54,12 @@ def get_fallback_prediction(locality, cuisine):
         'model_used': False
     }
 
+from flask import render_template  # make sure this import is at the top
+
 @app.route('/')
 def home():
-    return jsonify({
-        'message': '🍽️ Welcome to the Restaurant Recommender API!',
-        'available_endpoints': {
-            'POST /predict': 'Predict restaurant ratings',
-            'GET /localities': 'Get list of localities',
-            'GET /cuisines': 'Get list of cuisines',
-            'GET /cuisines/<locality>': 'Get cuisines by locality',
-            'GET /health': 'Health check'
-        }
-    })
+    return render_template('index.html')  # render your frontend page
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
