@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import logging
 
@@ -6,8 +6,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Create app before defining routes
-app = Flask(__name__)
+# Initialize Flask app and tell it to find templates in current folder
+app = Flask(__name__, template_folder='.')
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ML model loading
@@ -54,17 +54,13 @@ def get_fallback_prediction(locality, cuisine):
         'model_used': False
     }
 
-from flask import render_template  # make sure this import is at the top
-
 @app.route('/')
 def home():
-    return render_template('index.html')  # render your frontend page
-
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Step 1: Get data from the frontend (JSON)
         data = request.get_json()
         if not data:
             return jsonify({'error': 'No data provided', 'status': 'error'}), 400
@@ -77,19 +73,17 @@ def predict():
 
         logger.info(f"🔍 Prediction request: {locality} + {cuisine}")
 
-        # Step 2: Try ML model first, fallback if needed
         if MODEL_AVAILABLE:
             try:
                 prediction_result = get_prediction(locality, cuisine)
-                logger.info(f"✅ ML Model prediction successful")
+                logger.info("✅ ML Model prediction successful")
                 return jsonify(prediction_result)
             except Exception as e:
                 logger.error(f"❌ ML Model failed: {e}")
                 logger.info("🔄 Using fallback prediction")
 
-        # Step 3: Use fallback prediction
         prediction_result = get_fallback_prediction(locality, cuisine)
-        logger.info(f"✅ Fallback prediction successful")
+        logger.info("✅ Fallback prediction successful")
         return jsonify(prediction_result)
 
     except Exception as e:
@@ -98,78 +92,57 @@ def predict():
 
 @app.route('/localities', methods=['GET'])
 def localities():
-    """Return a list of available localities"""
     try:
         if MODEL_AVAILABLE:
             localities_list = get_localities()
         else:
-            # Fallback localities
             localities_list = [
                 "Vijay Nagar", "Old Palasia", "New Palasia", "Sapna Sangeeta",
                 "Bhawar Kuan", "Rajendra Nagar", "Sudama Nagar", "Geeta Bhawan"
             ]
 
-        return jsonify({
-            'status': 'success',
-            'localities': localities_list
-        })
+        return jsonify({'status': 'success', 'localities': localities_list})
     except Exception as e:
         logger.error(f"❌ Localities endpoint error: {e}")
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
 @app.route('/cuisines', methods=['GET'])
 def cuisines():
-    """Return a list of available cuisines"""
     try:
         if MODEL_AVAILABLE:
             cuisines_list = get_cuisines()
         else:
-            # Fallback cuisines
             cuisines_list = [
                 "North Indian", "South Indian", "Chinese", "Italian",
                 "Fast Food", "Street Food", "Desserts", "Cafe"
             ]
 
-        return jsonify({
-            'status': 'success',
-            'cuisines': cuisines_list
-        })
+        return jsonify({'status': 'success', 'cuisines': cuisines_list})
     except Exception as e:
         logger.error(f"❌ Cuisines endpoint error: {e}")
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
 @app.route('/cuisines/<locality>', methods=['GET'])
 def cuisines_by_locality(locality):
-    """Return cuisines available for a specific locality"""
     try:
         if MODEL_AVAILABLE:
             cuisines_list = get_cuisines_for_locality(locality)
         else:
-            # Fallback cuisines for any locality
             cuisines_list = [
                 "North Indian", "South Indian", "Chinese", "Italian",
                 "Fast Food", "Street Food"
             ]
 
-        return jsonify({
-            'status': 'success',
-            'locality': locality,
-            'cuisines': cuisines_list
-        })
+        return jsonify({'status': 'success', 'locality': locality, 'cuisines': cuisines_list})
     except Exception as e:
         logger.error(f"❌ Cuisines by locality endpoint error: {e}")
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
 @app.route('/health', methods=['GET'])
 def health():
-    """Health check endpoint"""
-    return jsonify({
-        'status': 'healthy',
-        'model_available': MODEL_AVAILABLE,
-        'message': 'Server is running'
-    })
+    return jsonify({'status': 'healthy', 'model_available': MODEL_AVAILABLE, 'message': 'Server is running'})
 
 if __name__ == '__main__':
     logger.info("🚀 Starting Flask server...")
     logger.info(f"📊 Model Status: {'✅ Available' if MODEL_AVAILABLE else '❌ Using Fallback'}")
-    app.run(debug=False, host='127.0.0.1', port=5000)  # Disable debug mode for stability
+    app.run(debug=False, host='127.0.0.1', port=5000)
